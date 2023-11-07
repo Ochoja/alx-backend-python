@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Contains an async co-routine"""
 import asyncio
+import random
 from typing import List
 
 
@@ -9,8 +10,13 @@ wait_random = __import__('0-basic_async_syntax').wait_random
 
 async def wait_n(n: int, max_delay: int) -> List[float]:
     """Return a list of delays"""
-    delays: List = []
+    tasks = []
+    delays = []
 
-    delays = [await wait_random(max_delay) for i in range(n)]
+    for _ in range(n):
+        tasks.append(wait_random(max_delay))
+
+    for task in asyncio.as_completed(tasks):
+        delays.append(await task)
 
     return delays
