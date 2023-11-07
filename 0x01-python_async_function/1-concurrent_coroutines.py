@@ -10,13 +10,13 @@ wait_random = __import__('0-basic_async_syntax').wait_random
 
 async def wait_n(n: int, max_delay: int) -> List[float]:
     """Return a list of delays"""
-    tasks = []
-    delays = []
+    coros = []  # list of coroutines
+    delays = []  # list of delays in seconds
 
     for _ in range(n):
-        tasks.append(wait_random(max_delay))
+        coros.append(wait_random(max_delay))
 
-    for task in asyncio.as_completed(tasks):
-        delays.append(await task)
+    for coro in asyncio.as_completed(coros):
+        delays.append(await coro)
 
     return delays
